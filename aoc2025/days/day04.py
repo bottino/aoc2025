@@ -6,7 +6,7 @@ def part_1(input="example"):
     floor = _read_input(input)
 
     # Convolve with kernel
-    removed = _get_removed_boxes(floor)
+    removed = _get_removed_rolls_locations(floor)
 
     print(len(removed))
 
@@ -14,21 +14,24 @@ def part_1(input="example"):
 def part_2(input="example"):
     floor = _read_input(input)
 
-    removed_boxes = []
-    while len(removed_boxes) == 0 or removed_boxes[-1] != 0:
-        removed = _get_removed_boxes(floor)
-        removed_boxes.append(len(removed))
-        for i, j in removed:
+    num_removed = []
+    while not num_removed or num_removed[-1] != 0:
+        removed_rolls = _get_removed_rolls_locations(floor)
+        num_removed.append(len(removed_rolls))
+        for i, j in removed_rolls:
             floor[i, j] = 0
 
-    print(sum(removed_boxes))
+    print(sum(num_removed))
 
 
-def _get_removed_boxes(floor: np.array) -> np.array:
+def _get_removed_rolls_locations(floor: np.array) -> np.array:
+    # Get every tile on the floor surrounded by fewer than 4 rolls
     kernel = np.array([[1, 1, 1], [1, 0, 1], [1, 1, 1]])
     result = convolve2d(floor, kernel, mode="same") < 4
-    result_masked = np.ma.masked_array(result, mask=np.logical_not(floor))
-    return np.argwhere(result_masked)
+    # Mask with the floor to only get the ROLLS surrounded by fewer than 4 rolls
+    removed_rolls = np.ma.masked_array(result, mask=np.logical_not(floor))
+    # Return the removed rolls locations
+    return np.argwhere(removed_rolls)
 
 
 def _read_input(input="example"):
