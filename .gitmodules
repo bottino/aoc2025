@@ -1,0 +1,3 @@
+[submodule "inputs"]
+	path = inputs
+	url = git@perso.github.com:bottino/aoc2025-inputs.git
