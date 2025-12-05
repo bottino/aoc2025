@@ -1,7 +1,5 @@
-def part_1(input="example"):
-    filepath = f"./inputs/day03/{input}.txt"
-    with open(filepath, "r") as f:
-        lines = f.read().splitlines()
+def part_1(input: str) -> int:
+    lines = input.splitlines()
 
     total_joltage = 0
     for line in lines:
@@ -19,13 +17,11 @@ def part_1(input="example"):
         joltage = 10 * first_digit + second_digit
         total_joltage += joltage
 
-    print(total_joltage)
+    return total_joltage
 
 
-def part_2(input="example"):
-    filepath = f"./inputs/day03/{input}.txt"
-    with open(filepath, "r") as f:
-        lines = f.read().splitlines()
+def part_2(input: str) -> int:
+    lines = input.splitlines()
 
     total_joltage = 0
     num_batteries = 12
@@ -45,8 +41,4 @@ def part_2(input="example"):
         joltage = sum([10**i * n for i, n in enumerate(stack[::-1])])
         total_joltage += joltage
 
-    print(total_joltage)
-
-
-if __name__ == "__main__":
-    part_2("input")
+    return total_joltage

@@ -1,4 +1,4 @@
-def part_1(input="example"):
+def part_1(input: str) -> int:
     ranges, ids = _read_input(input)
 
     total_fresh = 0
@@ -8,10 +8,10 @@ def part_1(input="example"):
                 total_fresh += 1
                 break
 
-    print(total_fresh)
+    return total_fresh
 
 
-def part_2(input="example"):
+def part_2(input: str) -> int:
     ranges, _ = _read_input(input)
 
     tagged = []
@@ -37,15 +37,11 @@ def part_2(input="example"):
                 compacted_ranges.append((current_range_start, edge[0]))
 
     total_ids = sum([r[1] + 1 - r[0] for r in compacted_ranges])
-    print(total_ids)
+    return total_ids
 
 
-def _read_input(input="example"):
-    filepath = f"./inputs/day05/{input}.txt"
-    with open(filepath, "r") as f:
-        text = f.read()
-
-    ranges_str, ids_str = text.split("\n\n")
+def _read_input(input: str):
+    ranges_str, ids_str = input.split("\n\n")
     ids = [int(i) for i in ids_str.splitlines()]
     ranges = [tuple(map(int, r.split("-"))) for r in ranges_str.splitlines()]
     return ranges, ids

@@ -1,7 +1,5 @@
-def part_1(input="example"):
-    filepath = f"./inputs/day02/{input}.txt"
-    with open(filepath, "r") as f:
-        lines = f.read().splitlines()
+def part_1(input: str) -> int:
+    lines = input.splitlines()
 
     ranges = []
     for line in lines:
@@ -17,13 +15,11 @@ def part_1(input="example"):
             ):
                 invalids += id
 
-    print(invalids)
+    return invalids
 
 
-def part_2(input="example"):
-    filepath = f"./inputs/day02/{input}.txt"
-    with open(filepath, "r") as f:
-        lines = f.read().splitlines()
+def part_2(input: str) -> int:
+    lines = input.splitlines()
 
     ranges = []
     for line in lines:
@@ -36,7 +32,7 @@ def part_2(input="example"):
             if _is_invalid_id(str_id):
                 invalids.add(id)
 
-    print(sum(invalids))
+    return sum(invalids)
 
 
 def _is_invalid_id(id: str) -> bool:
@@ -51,7 +47,3 @@ def _is_invalid_id(id: str) -> bool:
         if len(set(split_id)) == 1:
             return True
     return False
-
-
-if __name__ == "__main__":
-    part_2("input")

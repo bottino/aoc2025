@@ -2,16 +2,16 @@ import numpy as np
 from scipy.signal import convolve2d
 
 
-def part_1(input="example"):
+def part_1(input: str) -> int:
     floor = _read_input(input)
 
     # Convolve with kernel
     removed = _get_removed_rolls_locations(floor)
 
-    print(len(removed))
+    return len(removed)
 
 
-def part_2(input="example"):
+def part_2(input: str) -> int:
     floor = _read_input(input)
 
     num_removed = []
@@ -21,7 +21,7 @@ def part_2(input="example"):
         for i, j in removed_rolls:
             floor[i, j] = 0
 
-    print(sum(num_removed))
+    return sum(num_removed)
 
 
 def _get_removed_rolls_locations(floor: np.array) -> np.array:
@@ -34,10 +34,8 @@ def _get_removed_rolls_locations(floor: np.array) -> np.array:
     return np.argwhere(removed_rolls)
 
 
-def _read_input(input="example"):
-    filepath = f"./inputs/day04/{input}.txt"
-    with open(filepath, "r") as f:
-        lines = f.read().splitlines()
+def _read_input(input: str):
+    lines = input.splitlines()
 
     # Create array
     floor = np.zeros([len(lines), len(lines[0])], dtype=int)
@@ -47,7 +45,3 @@ def _read_input(input="example"):
                 floor[i, j] = 1
 
     return floor
-
-
-if __name__ == "__main__":
-    part_2("input")

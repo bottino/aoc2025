@@ -1,7 +1,5 @@
-def part_1(input="example"):
-    filepath = f"./inputs/day01/{input}.txt"
-    with open(filepath, "r") as f:
-        lines = f.read().splitlines()
+def part_1(input: str) -> int:
+    lines = input.splitlines()
 
     pos = 50
     zeroes = 0
@@ -19,13 +17,11 @@ def part_1(input="example"):
         if pos == 0:
             zeroes += 1
 
-    print(zeroes)
+    return zeroes
 
 
-def part_2(input="example"):
-    filepath = f"./inputs/day01/{input}.txt"
-    with open(filepath, "r") as f:
-        lines = f.read().splitlines()
+def part_2(input: str) -> int:
+    lines = input.splitlines()
 
     pos = 50
     zeroes = 0
@@ -50,10 +46,4 @@ def part_2(input="example"):
 
         zeroes += turns
 
-        print(f"{l}, {zeroes}, {turns}, {pos}")
-
-    print(zeroes)
-
-
-if __name__ == "__main__":
-    part_2("input")
+    return zeroes

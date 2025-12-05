@@ -1,19 +1,28 @@
 import argparse
-from datetime import datetime
 import os
+from datetime import datetime
 from importlib import import_module
+from typing import Optional
 
 
-def main(day: int, part: int, is_example: bool) -> None:
-    input = "example" if is_example else "input"
+def main(day: Optional[int], part: Optional[int], is_example: bool) -> None:
     day_module = import_module(f"aoc2025.days.day{day:02}")
-    if part == 1:
-        day_module.part_1(input)
-    elif part == 2:
-        day_module.part_2(input)
-    else:
-        day_module.part_1(input)
-        day_module.part_2(input)
+    input = _read_input(day, is_example)
+    example_str = " (example)" if is_example else ""
+    if part == 1 or part is None:
+        sol = day_module.part_1(input)
+        print(f"Day {day:02} - Part 1{example_str}: {sol}")
+    if part == 2 or part is None:
+        sol = day_module.part_2(input)
+        print(f"Day {day:02} - Part 2{example_str}: {sol}")
+
+
+def _read_input(day: int, is_example: bool) -> str:
+    filename = "example" if is_example else "input"
+    filepath = f"./inputs/day{day:02}/{filename}.txt"
+    with open(filepath, "r") as f:
+        input = f.read()
+    return input
 
 
 if __name__ == "__main__":
@@ -23,7 +32,7 @@ if __name__ == "__main__":
 
     current_day = datetime.now().day
     aoc_day = os.getenv("AOC_DAY", current_day)
-    aoc_part = os.getenv("AOC_PART", 0)
+    aoc_part = os.getenv("AOC_PART", None)
 
     parser.add_argument("-d", "--day", type=int, default=aoc_day)
     parser.add_argument("-p", "--part", type=int, default=aoc_part)
