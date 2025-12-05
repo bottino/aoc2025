@@ -7,5 +7,6 @@ requires-python = ">=3.13"
 dependencies = [
     "argparse>=1.4.0",
     "numpy>=2.3.5",
+    "pytest>=9.0.1",
     "scipy>=1.16.3",
 ]
