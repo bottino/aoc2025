@@ -5,7 +5,7 @@ from importlib import import_module
 from typing import Optional
 
 
-def main(day: Optional[int], part: Optional[int], is_example: bool) -> None:
+def main(day: int, part: Optional[int] = None, is_example: bool = False) -> None:
     day_module = import_module(f"aoc2025.days.day{day:02}")
     input = _read_input(day, is_example)
     example_str = " (example)" if is_example else ""
@@ -37,6 +37,14 @@ if __name__ == "__main__":
     parser.add_argument("-d", "--day", type=int, default=aoc_day)
     parser.add_argument("-p", "--part", type=int, default=aoc_part)
     parser.add_argument("-e", "--example", action="store_true")
+    parser.add_argument("-a", "--all", action="store_true")
     args = parser.parse_args()
 
-    main(args.day, args.part, args.example)
+    if args.all:
+        all_days = sorted(
+            [int(d[3:5]) for d in os.listdir("aoc2025/days") if d.startswith("day")]
+        )
+        for day in all_days:
+            main(day=day, is_example=args.example)
+    else:
+        main(args.day, args.part, args.example)
