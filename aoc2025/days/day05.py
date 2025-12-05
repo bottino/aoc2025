@@ -1,6 +1,3 @@
-import sys
-
-
 def part_1(input="example"):
     ranges, ids = _read_input(input)
 
@@ -17,37 +14,30 @@ def part_1(input="example"):
 def part_2(input="example"):
     ranges, _ = _read_input(input)
 
-    start_len = sys.maxsize
-    while len(ranges) < start_len:
-        start_len = len(ranges)
-        ranges = _compact_ranges(ranges)
+    tagged = []
+    for r in ranges:
+        tagged.append((r[0], "begin"))
+        tagged.append((r[1], "end"))
 
-    total_ids = sum([r[1] + 1 - r[0] for r in ranges])
+    # It's important that beginnings get sorted _before_ ends that have the same edge
+    # It's handled here naturally because 'begin' < 'end' in alphabetical order
+    tagged = sorted(tagged)
+
+    compacted_ranges = []
+    current_range_start = 0
+    num_open_ranges = 0
+    for edge in tagged:
+        if edge[1] == "begin":
+            if num_open_ranges == 0:
+                current_range_start = edge[0]
+            num_open_ranges += 1
+        else:
+            num_open_ranges -= 1
+            if num_open_ranges == 0:
+                compacted_ranges.append((current_range_start, edge[0]))
+
+    total_ids = sum([r[1] + 1 - r[0] for r in compacted_ranges])
     print(total_ids)
-
-
-def _compact_ranges(ranges):
-    final_ranges = [ranges[0]]
-    for r in ranges[1:]:
-        is_disjoint_from_all_exising = True
-        for i, f in enumerate(final_ranges):
-            if not _is_disjoint(r, f):
-                final_ranges[i] = (min(r[0], f[0]), max(r[1], f[1]))
-                is_disjoint_from_all_exising = False
-                break
-
-        if is_disjoint_from_all_exising:
-            final_ranges.append(r)
-
-    return final_ranges
-
-
-def _is_disjoint(a, b) -> bool:
-    if b[1] < a[0]:  # disjoint ranges
-        return True
-    if b[0] > a[1]:  # disjoint ranges
-        return True
-    return False
 
 
 def _read_input(input="example"):
