@@ -4,8 +4,7 @@ BeamRow = set[int]
 
 
 def part_1(input: str) -> int:
-    print(input)
-    manifold = input.splitlines()
+    manifold = input.splitlines()[::2]  # half the lines are empty
     start_column = manifold[0].index("S")
     beams = {start_column}
     num_splits = 0
@@ -14,7 +13,20 @@ def part_1(input: str) -> int:
     return num_splits
 
 
-def _process_row(beams, row, num_splits):
+def part_2(input: str) -> int:
+    manifold = input.splitlines()[::2]  # half the lines are empty
+    start_column = manifold[0].index("S")
+    beams = {start_column: 1}
+    for row in manifold[1:]:
+        beams = _process_row_part_2(beams, row)
+
+    num_timelines = 0
+    for _, v in beams.items():
+        num_timelines += v
+    return num_timelines
+
+
+def _process_row(beams: set[int], row: list[str], num_splits: int) -> [set[int], int]:
     for i, char in enumerate(row):
         if char == "^":
             if i in beams:
@@ -25,18 +37,14 @@ def _process_row(beams, row, num_splits):
     return beams, num_splits
 
 
-def _trickle_down(
-    row: int, column: int, manifold: Manifold, splits: set[Split]
-) -> None:
-    if row >= len(manifold) - 1:
-        return
-
-    # Go down
-    row += 1
-    if manifold[row][column] == "^":
-        # Keep count of splits
-        splits.add((row, column))
-        _trickle_down(row, column - 1, manifold, splits)
-        _trickle_down(row, column + 1, manifold, splits)
-    else:
-        _trickle_down(row, column, manifold, splits)
+def _process_row_part_2(beams: dict[int, int], row: list[str]) -> dict[int, int]:
+    for i, char in enumerate(row):
+        if char == "^":
+            if i in beams:
+                num_timelines = beams.pop(i)
+                for neighbor in (i - 1, i + 1):
+                    if neighbor in beams:
+                        beams[neighbor] += num_timelines
+                    else:
+                        beams[neighbor] = num_timelines
+    return beams
