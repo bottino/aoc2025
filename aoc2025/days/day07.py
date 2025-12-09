@@ -1,8 +1,3 @@
-Manifold = list[str]
-Split = tuple[int, int]
-BeamRow = set[int]
-
-
 def part_1(input: str) -> int:
     manifold = input.splitlines()[::2]  # half the lines are empty
     start_column = manifold[0].index("S")
