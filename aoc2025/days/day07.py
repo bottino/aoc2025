@@ -11,14 +11,12 @@ def part_1(input: str) -> int:
 def part_2(input: str) -> int:
     manifold = input.splitlines()[::2]  # half the lines are empty
     start_column = manifold[0].index("S")
-    beams = {start_column: 1}
+    timelines = [0] * len(manifold[0])
+    timelines[start_column] = 1
     for row in manifold[1:]:
-        beams = _process_row_part_2(beams, row)
+        timelines = _propagate_timelines(timelines, row)
 
-    num_timelines = 0
-    for _, v in beams.items():
-        num_timelines += v
-    return num_timelines
+    return sum(timelines)
 
 
 def _process_row(beams: set[int], row: list[str], num_splits: int) -> [set[int], int]:
@@ -32,14 +30,11 @@ def _process_row(beams: set[int], row: list[str], num_splits: int) -> [set[int],
     return beams, num_splits
 
 
-def _process_row_part_2(beams: dict[int, int], row: list[str]) -> dict[int, int]:
+def _propagate_timelines(beams: list[int], row: list[str]) -> dict[int, int]:
     for i, char in enumerate(row):
         if char == "^":
-            if i in beams:
-                num_timelines = beams.pop(i)
-                for neighbor in (i - 1, i + 1):
-                    if neighbor in beams:
-                        beams[neighbor] += num_timelines
-                    else:
-                        beams[neighbor] = num_timelines
+            num_timelines = beams[i]
+            beams[i] = 0
+            beams[i + 1] += num_timelines
+            beams[i - 1] += num_timelines
     return beams
