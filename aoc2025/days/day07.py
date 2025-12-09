@@ -1,16 +1,28 @@
 Manifold = list[str]
 Split = tuple[int, int]
+BeamRow = set[int]
 
 
 def part_1(input: str) -> int:
     print(input)
     manifold = input.splitlines()
-    start_row = 1
     start_column = manifold[0].index("S")
-    splits = set()
-    _trickle_down(start_row, start_column, manifold, splits)
-    print(len(splits))
-    return 0
+    beams = {start_column}
+    num_splits = 0
+    for row in manifold[1:]:
+        beams, num_splits = _process_row(beams, row, num_splits)
+    return num_splits
+
+
+def _process_row(beams, row, num_splits):
+    for i, char in enumerate(row):
+        if char == "^":
+            if i in beams:
+                num_splits += 1
+                beams.remove(i)
+                beams.add(i - 1)
+                beams.add(i + 1)
+    return beams, num_splits
 
 
 def _trickle_down(
