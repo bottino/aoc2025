@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import patches
 
 
 def part_1(input: str) -> int:
@@ -26,45 +27,55 @@ def part_2(input: str) -> int:
         max_y = coord[0] if coord[0] > max_y else max_y
         coords.append((coord[1], coord[0]))
 
+    # Based on observation of input, there are two likely candidates
+    candidates = [(48472, 94664), (50278, 94664)]
+
+    # Left half
+    max_area = 0
+    best = None
+    a = candidates[0]
+    for b in coords:
+        if b[0] < 50000:
+            area = (abs(a[0] - b[0]) + 1) * (abs(a[1] - b[1]) + 1)
+            if area > max_area:
+                max_area = area
+                best = b
+
+    # Right half
+    # a = candidates[1]
+    # for b in coords:
+    #     if b[0] > 50000:
+    #         area = (abs(a[0] - b[0]) + 1) * (abs(a[1] - b[1]) + 1)
+    #         if area > max_area:
+    #             max_area = area
+    #             best = b
+
     coords = np.array(coords)
-
-    floor = np.zeros((max_x + 1, max_y + 1), dtype=np.uint8)
-    for c in coords:
-        floor[c[0], c[1]] = 1
-
-    # plt.plot(coords[:, 0], coords[:, 1])
-    # plt.show()
-
-    # fill the rows with green tiles
-    for i in range(floor.shape[0]):
-        inside = False
-        for j in range(floor.shape[1]):
-            if floor[i][j] == 1:
-                inside = not inside
-            else:
-                if inside:
-                    floor[i][j] = 2
-
-    # fill the columns with green tiles
-    for j in range(floor.shape[1]):
-        inside = False
-        for i in range(floor.shape[0]):
-            if floor[i][j] == 1:
-
-            else:
-                if inside:
-                    floor[i][j] = 2
-
-    SEED = (4, 4) if floor.shape[0] < 10000 else (40000, 40000)
-    _flood_fill(SEED, floor)
-
-    plt.imshow(floor)
+    candidates = np.array(candidates)
+    plt.plot(coords[:, 0], coords[:, 1])
+    rect = patches.Rectangle(
+        a, best[0] - a[0], best[1] - a[1], linewidth=1, edgecolor="r", facecolor="none"
+    )
+    ax = plt.gca()
+    ax.add_patch(rect)
     plt.show()
 
+    return max_area
 
-    
-    if floor[*coord] > 0:
-        return
-    floor[*coord] = 2
-    for dir in [(0, 1), (1, 0), (-1, 0), (0, -1)]:
-        _flood_fill((coord[0] + dir[0], coord[1] + dir[1]), floor)
+
+def _square_intersect(u, v) -> bool:
+    corners = [u, (v[0], u[1]), v, (u[0], v[1])]
+
+    a = (a2[0] - a1[0], a2[1] - a1[1])
+    b = (b2[0] - b1[0], b2[1] - b1[1])
+def _seg_intersect(a1, a2, b1, b2) -> bool:
+    if perp != 0:
+    perp = a[0] * b[0] + a[1] * b[1]
+        return False
+
+    for c in (0, 1):
+        if a[c] == 0:
+            if min(b1[c], b2[c]) <= a1[c] and a1[c] <= max(b1[c], b2[c]):
+                return True
+
+    return False
